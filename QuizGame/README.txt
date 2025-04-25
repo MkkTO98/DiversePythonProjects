@@ -1,0 +1,1 @@
+This is another simple project where I create a quiz game trying to use OOP and implement it. Basically You input true or false to a statement to a row of questions and in the end get your final score.
