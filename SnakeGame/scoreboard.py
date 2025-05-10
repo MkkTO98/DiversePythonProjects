@@ -1,37 +1,41 @@
 from turtle import Turtle, Screen
 
-HEIGHT = 800
 
-score = 0
-score_pen = Turtle()
-score_pen.color('white')
-score_pen.speed(0)
-score_pen.penup()
-score_pen.hideturtle()
-score_pen.goto(0, 3*HEIGHT/8)
-score_pen.write(f'Score: {score}', align='center', font=('Arial', 20, 'bold'))
-
-class ScoreBoard:
-    def __init__(self):
+class ScoreBoard(Turtle):
+    def __init__(self, height):
+        super().__init__()
+        self.height = height
+        self.color('white')
+        self.speed(0)
+        self.penup()
+        self.hideturtle()
         self.score = 0
+        with open('data.txt', 'r') as file:
+            content = int(file.read())
+            self.high_score = content
+        self.snake_alive = True
+
+
+    def write_score(self):
+        self.clear()
+        self.goto(0, 3 * self.height / 8 +30)
+        self.write(f'High Score: {self.high_score}', align='center', font=('Arial', 12, 'bold'))
+        self.goto(0, 3 * self.height / 8)
+        self.write(f'Score: {self.score}', align='center', font=('Arial', 20, 'bold'))
 
     def increase_score(self):
         self.score += 1
-        self.update_score()
-
-    def update_score(self):
-        score_pen.clear()
-        score_pen.goto(0, 3 * HEIGHT / 8)
-        score_pen.write(f'Score: {score}', align='center', font=('Arial', 20, 'bold'))
+        self.write_score()
 
     def game_over(self):
-        game_over_pen = Turtle()
-        game_over_pen.color('white')
-        game_over_pen.speed(0)
-        game_over_pen.penup()
-        game_over_pen.hideturtle()
-        score_pen.goto(0, 0)
-        score_pen.clear()
-        score_pen.write('Game Over', align='center', font=('Arial', 100, 'bold'))
-        score_pen.goto(0, -3 * HEIGHT / 8)
-        score_pen.write(f'Final Score: {score}', align='center', font=('Arial', 50, 'bold'))
+        self.goto(0, 0)
+        self.write('Game Over', align='center', font=('Arial', 100, 'bold'))
+        self.goto(0, -3 * self.height / 8 +60)
+        if self.score > self.high_score:
+            self.write(f'NEW High Score: {self.score}', align='center', font=('Arial', 50, 'bold'))
+        else:
+            self.write(f'Final Score: {self.score}', align='center', font=('Arial', 50, 'bold'))
+
+    def press_space(self):
+        self.goto(0, -3 * self.height / 8 + 30)
+        self.write('Press \'space\' to play a New Game.', align='center', font=('Arial', 20, 'normal'))
